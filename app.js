@@ -1,26 +1,12 @@
-console.log("Express Tutorial");
-const http = require('http');
-const {readFileSync} = require('fs');
-const homepage = readFileSync('./index.html');
+const express = require("express");
+const app = express();
+const people = require('./router/people');
+const auth = require('./router/auth');
+app.use(express.static("./method-public"));
+app.use('/api/people',people);
+app.use('/login',auth)
+//optional
 
-const server = http.createServer((req,res)=>{
-   if(req.url === "/")
-   {
-    res.writeHead(200,{'content-type':'text/html'});
-    res.write(homepage);
-    res.end();
-   }
-   else if(req.url === "/about")
-   {
-    res.writeHead(200,{'content-type':'text/html'});
-    res.write('<h1>about page </h1>');
-    res.end();
-   }
-   else
-   {
-    res.writeHead(400,{'content-type':'text/html'});
-    res.write('<h1> page not found </h1>');
-    res.end();
-   }
-})
-server.listen(5000)
+app.listen(5000, () => {
+  console.log("This port is listening:5000");
+});
